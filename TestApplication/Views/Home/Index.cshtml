@@ -2,7 +2,7 @@
     @Scripts.Render("~/bundles/application")
 }
 
-<section class="streetlights">
+<section  class="streetlights">
     <header>
         <h2>Streetlights</h2>
     </header>
@@ -18,22 +18,26 @@
     </header>
     <article class="shadowContent" data-bind="with: selectedStreetlight">
         <div data-bind="with: $root">
-            <button class="pull-right" data-bind="click: toggleLightState.bind($data, selectedStreetlight()), text: selectedStreetlight().isSwitchedOn() ? 'Switch Off' : 'Switch On'"></button>
+            @*<button class="pull-right" data-bind="click: toggleLightState.bind($data, selectedStreetlight()), text: selectedStreetlight().isSwitchedOn() ? 'Switch Off' : 'Switch On'"></button>*@
+            <button class="pull-right" data-bind="click: toggleLightState.bind($data, selectedStreetlight()), text: $root.turnOnStreetLightBtnText()"></button>
             <h2>Streetlight Information</h2>
-            <p>Power Draw: <span>(Power Draw Here)</span>W</p>
+            <p>Power Draw: <span data-bind="text: totalPowerDrawStreetlight">(Power Draw Here)</span>W</p>
         </div>
 
         <div>
             <h3>Bulb Information</h3>
             <ul class="list-group" data-bind="foreach: bulbs">
                 <li class="list-group-item">
-                    <div class="bulb-display"></div>
+                    <div class="bulb-display" data-bind="style: {'background-color': $root.allBulbsWhatColorForIndicatorCircle()[$index()]}"></div>
                     <span data-bind="text: bulbStatus().isOn ? 'On' : 'Off'"></span>
                     <span data-bind="bulbInformation.bulbType"></span>
                     <span data-bind="visible: $root.isFailed($data)">Failed</span>
-                    Temperature: <span data-bind="text: bulbStatus().bulbTemperature"></span>/<span data-bind="text:bulbInformation.maxTemperature"></span>C
+                    Temperature:
+                    <span data-bind="style: {color: bulbStatus().bulbTemperature === 0 ? 'grey' : bulbStatus().bulbTemperature > bulbInformation.maxTemperature ? 'red' : bulbStatus().bulbTemperature > (bulbInformation.maxTemperature/2) ? 'orange' : 'black'}">
+                    <span data-bind="text: bulbStatus().bulbTemperature"></span>/<span data-bind="text:bulbInformation.maxTemperature"></span>C</span>
+
                     Hours: <span data-bind="text: bulbStatus().bulbHours"></span>/<span data-bind="text:bulbInformation.maxHours"></span>hrs
-                    <button class="pull-right">Toggle Bulb State</button>
+                    <button class="pull-right" data-bind="click: $root.toggleBulbState.bind($data, $root, $data)">Toggle Bulb State</button>
                 </li>
             </ul>
         </div>
