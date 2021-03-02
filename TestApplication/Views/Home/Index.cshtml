@@ -1,0 +1,41 @@
+﻿@section Scripts {
+    @Scripts.Render("~/bundles/application")
+}
+
+<section class="streetlights">
+    <header>
+        <h2>Streetlights</h2>
+    </header>
+    <nav class="shadowContent">
+        <ul data-bind="foreach: streetlights">
+            <li><a data-bind="text: description, click: $parent.selectStreetlight.bind($data, $parent)"></a></li>
+        </ul>
+    </nav>
+</section>
+<section class="streetlight-details">
+    <header>
+        <h2 style="display:inline-block">Streetlight Details</h2>
+    </header>
+    <article class="shadowContent" data-bind="with: selectedStreetlight">
+        <div data-bind="with: $root">
+            <button class="pull-right" data-bind="click: toggleLightState.bind($data, selectedStreetlight()), text: selectedStreetlight().isSwitchedOn() ? 'Switch Off' : 'Switch On'"></button>
+            <h2>Streetlight Information</h2>
+            <p>Power Draw: <span>(Power Draw Here)</span>W</p>
+        </div>
+
+        <div>
+            <h3>Bulb Information</h3>
+            <ul class="list-group" data-bind="foreach: bulbs">
+                <li class="list-group-item">
+                    <div class="bulb-display"></div>
+                    <span data-bind="text: bulbStatus().isOn ? 'On' : 'Off'"></span>
+                    <span data-bind="bulbInformation.bulbType"></span>
+                    <span data-bind="visible: $root.isFailed($data)">Failed</span>
+                    Temperature: <span data-bind="text: bulbStatus().bulbTemperature"></span>/<span data-bind="text:bulbInformation.maxTemperature"></span>C
+                    Hours: <span data-bind="text: bulbStatus().bulbHours"></span>/<span data-bind="text:bulbInformation.maxHours"></span>hrs
+                    <button class="pull-right">Toggle Bulb State</button>
+                </li>
+            </ul>
+        </div>
+    </article>
+</section>
